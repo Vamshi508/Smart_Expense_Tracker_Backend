@@ -7,6 +7,9 @@ import expenseRoutes from "./routes/expense.routes.js";
 
 import AppError from "./utils/AppError.js";
 import errorHandler from "./middlewares/error.middleware.js";
+import userRoutes from "./routes/user.routes.js";
+
+
 
 const app = express();
 
@@ -20,7 +23,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/groups", groupRoutes);
 app.use("/api/expenses", expenseRoutes);
-
+app.use("/api/users", userRoutes);
 // ✅ 404 handler
 app.use((req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl}`, 404));
