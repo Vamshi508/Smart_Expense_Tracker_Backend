@@ -35,6 +35,10 @@ export const register = catchAsync(async (req, res) => {
 export const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    throw new AppError("Email and password are required", 400);
+  }
+
   const user = await User.findOne({ email: email.toLowerCase() });
 
   if (!user) {
@@ -55,3 +59,4 @@ export const login = catchAsync(async (req, res) => {
 
   res.json({ token });
 });
+
