@@ -8,19 +8,28 @@ import AppError from "../utils/AppError.js";
 export const register = catchAsync(async (req, res) => {
   const { name, email, password } = req.body;
 
+  if (!name || !email || !password) {
+    throw new AppError("All fields are required", 400);
+  }
+
+  const existingUser = await User.findOne({ email: email.toLowerCase() });
+  if (existingUser) {
+    throw new AppError("Email already registered", 400);
+  }
+
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = await User.create({
     name,
-    email: email.toLowerCase(),   // 🔥 IMPORTANT
+    email: email.toLowerCase(),
     password: hashedPassword
   });
 
   res.status(201).json({
-    id: user._id,
-    email: user.email
+    message: "User registered successfully"
   });
 });
+
 
 
 export const login = catchAsync(async (req, res) => {
